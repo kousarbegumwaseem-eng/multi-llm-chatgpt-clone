@@ -291,12 +291,14 @@ https://multi-llm-chatgpt-clone.onrender.com
 
 # 🔮 Future Improvements
 
-* Cloud Deployment (Vercel + Render)
 * Docker Support
 * Real Authentication System
 * Streaming Responses
 * User Profiles and Settings
 * Export Chat Conversations
+* AI Response Rating System
+* Chat Export to PDF
+* Multi-User Support
 
 ---
 
