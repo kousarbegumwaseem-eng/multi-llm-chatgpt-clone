@@ -261,6 +261,34 @@ Frontend Display
 
 ---
 
+## Live Demo
+
+Frontend:
+https://multi-llm-chatgpt-clone.vercel.app
+
+Backend:
+https://multi-llm-chatgpt-clone.onrender.com
+
+## 📸 Deployment Screenshots
+
+### Vercel Deployment
+![Vercel Ready](screenshots/vercel-ready.png)
+
+### Render Deployment
+![Render Live](screenshots/render-live.png)
+
+### Live Application - Screenshot 1
+![Live App 1](screenshots/live-app-1.png)
+
+### Live Application - Screenshot 2
+![Live App 2](screenshots/live-app-2.png)
+
+### Live Application - Screenshot 3
+![Live App 3](screenshots/live-app-3.png)
+
+### Live Application - Screenshot 4
+![Live App 4](screenshots/live-app-4.png)
+
 # 🔮 Future Improvements
 
 * Cloud Deployment (Vercel + Render)
