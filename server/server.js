@@ -18,11 +18,10 @@ app.use(express.json());
 // PostgreSQL Connection
 // ===============================
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'multillm',
-    password: 'sql123',
-    port: 5432,
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false,
+    },
 });
 
 const openrouter = new OpenAI({
