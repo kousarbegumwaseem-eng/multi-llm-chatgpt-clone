@@ -9,14 +9,14 @@ function Sidebar({
 
         <div
             style={{
-                width: '250px',
-                backgroundColor: '#1f2937',
-                padding: '20px',
-                color: 'white',
-                height: '100vh',
-                overflowY: 'auto',
-                boxSizing: 'border-box'
-            }}
+    width: '300px',
+    backgroundColor: '#0f172a',
+    color: 'white',
+    padding: '20px',
+    minHeight: '100vh',
+    borderRight: '1px solid #1f2937',
+    boxSizing: 'border-box'
+}}
         >
 
             {/* Title */}
@@ -28,15 +28,19 @@ function Sidebar({
             <button
                 onClick={newChat}
                 style={{
-                    width: '100%',
-                    padding: '12px',
-                    borderRadius: '10px',
-                    border: 'none',
-                    backgroundColor: '#2563eb',
-                    color: 'white',
-                    cursor: 'pointer',
-                    fontSize: '16px'
-                }}
+    width: '100%',
+    padding: '12px',
+    borderRadius: '10px',
+    border: 'none',
+    backgroundColor: '#2563eb',
+    color: 'white',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+    marginBottom: '25px',
+    fontSize: '15px',
+    transition: '0.3s'
+    
+}}
             >
                 + New Chat
             </button>
@@ -52,28 +56,41 @@ function Sidebar({
                         <div
     key={chat.id}
     style={{
-        marginTop: '15px',
-        padding: '12px',
-        backgroundColor: '#374151',
-        borderRadius: '10px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: '10px'
-    }}
+    backgroundColor: '#1e293b',
+    padding: '12px',
+    borderRadius: '10px',
+    marginBottom: '12px',
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    transition: '0.3s'
+}}
 >
 
     {/* Prompt */}
-    <div
-        onClick={() => loadChat(chat)}
+<div
+    onClick={() => loadChat(chat)}
+    style={{
+        cursor: 'pointer',
+        flex: 1
+    }}
+>
+
+    <p
         style={{
-            cursor: 'pointer',
-            flex: 1,
-            wordBreak: 'break-word'
+            margin: 0,
+            fontSize: '14px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            maxWidth: '180px'
         }}
     >
         {chat.prompt}
-    </div>
+    </p>
+
+</div>
 
     {/* Delete Button */}
   <button
@@ -85,15 +102,17 @@ function Sidebar({
     }}
 
     style={{
-        backgroundColor: 'red',
-        color: 'white',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        padding: '5px 8px'
-    }}
+    backgroundColor: '#334155',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    padding: '6px 10px',
+    fontWeight: 'bold',
+    fontSize: '13px'
+}}
 >
-    X
+    🗑
 </button>
 
 </div>

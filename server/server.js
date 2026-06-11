@@ -3,6 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const { Pool } = require('pg');
+const OpenAI = require('openai');
 
 const app = express();
 
@@ -24,6 +25,11 @@ const pool = new Pool({
     port: 5432,
 });
 
+const openrouter = new OpenAI({
+    apiKey: process.env.OPENROUTER_API_KEY,
+    baseURL: 'https://openrouter.ai/api/v1',
+});
+
 // ===============================
 // Home Route
 // ===============================
@@ -42,30 +48,64 @@ app.post('/chat', async (req, res) => {
 
 const systemPrompt = req.body.systemPrompt;
 
-        // Fake AI Delay
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // ChatGPT
+const chatgptResult =
+await openrouter.chat.completions.create({
+    model: 'openai/gpt-4o-mini',
+    messages: [
+        {
+            role: 'system',
+            content: systemPrompt
+        },
+        {
+            role: 'user',
+            content: userPrompt
+        }
+    ]
+});
 
-        // Dummy AI Responses
-       const chatgptResponse =
-`System Prompt:
-${systemPrompt}
+const chatgptResponse =
+chatgptResult.choices[0].message.content;
 
-ChatGPT response for:
-${userPrompt}`;
+
+// Gemini
+const geminiResult =
+await openrouter.chat.completions.create({
+    model: 'google/gemini-2.5-flash',
+    messages: [
+        {
+            role: 'system',
+            content: systemPrompt
+        },
+        {
+            role: 'user',
+            content: userPrompt
+        }
+    ]
+});
 
 const geminiResponse =
-`System Prompt:
-${systemPrompt}
+geminiResult.choices[0].message.content;
 
-Gemini response for:
-${userPrompt}`;
+
+// Claude
+const claudeResult =
+await openrouter.chat.completions.create({
+    model: 'anthropic/claude-3.5-haiku',
+    messages: [
+        {
+            role: 'system',
+            content: systemPrompt
+        },
+        {
+            role: 'user',
+            content: userPrompt
+        }
+    ]
+});
 
 const claudeResponse =
-`System Prompt:
-${systemPrompt}
-
-Claude response for:
-${userPrompt}`;
+claudeResult.choices[0].message.content;
 
         // Save Chat to PostgreSQL
         await pool.query(

@@ -24,23 +24,43 @@ function App() {
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
   const [selectedModel, setSelectedModel] = useState('ChatGPT');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // ===============================
-  // Load History On Start
-  // ===============================
-  useEffect(() => {
+  const [username, setUsername] = useState('');
 
-    fetchHistory();
+   const [password, setPassword] = useState('');
 
-  }, []);
-  
-  useEffect(() => {
+// ===============================
+// Load History On Start
+// ===============================
+useEffect(() => {
+
+  fetchHistory();
+
+}, []);
+
+useEffect(() => {
 
   messagesEndRef.current?.scrollIntoView({
     behavior: 'smooth'
   });
 
 }, [messages]);
+
+
+// ===============================
+// Check Login
+// ===============================
+useEffect(() => {
+
+    const user = localStorage.getItem('user');
+
+    if (user) {
+
+        setIsLoggedIn(true);
+    }
+
+}, []);
 
   // ===============================
 // Start New Chat
@@ -74,8 +94,8 @@ const continueChat = (model) => {
     try {
 
       const response = await axios.get(
-        'http://localhost:5000/history'
-      );
+  `${import.meta.env.VITE_API_URL}/history`
+);
 
       setHistory(response.data);
 
@@ -93,9 +113,9 @@ const deleteChat = async (id) => {
 
   try {
 
-    await axios.delete(
-      `http://localhost:5000/delete-chat/${id}`
-    );
+   await axios.delete(
+  `${import.meta.env.VITE_API_URL}/delete-chat/${id}`
+);
 
     fetchHistory();
 
@@ -127,6 +147,39 @@ const deleteChat = async (id) => {
 ]);
   };
 
+// ===============================
+// Login
+// ===============================
+const handleLogin = () => {
+
+    if (!username || !password) {
+
+        alert('Please enter username and password.');
+
+        return;
+    }
+
+    localStorage.setItem('user', username);
+
+    setIsLoggedIn(true);
+
+    setUsername('');
+
+    setPassword('');
+};
+
+// ===============================
+// Logout
+// ===============================
+const handleLogout = () => {
+
+    localStorage.removeItem('user');
+
+    setIsLoggedIn(false);
+};
+
+    
+
   // ===============================
   // Generate Responses
   // ===============================
@@ -134,7 +187,7 @@ const deleteChat = async (id) => {
 
     if (!prompt.trim()) {
 
-      alert('Please enter a prompt');
+      alert('Please type a prompt before generating responses.');
       return;
     }
 
@@ -142,13 +195,13 @@ const deleteChat = async (id) => {
 
     try {
 
-      const response = await axios.post(
-        'http://localhost:5000/chat',
-        {
-  prompt: prompt,
-  systemPrompt: systemPrompt
-}
-      );
+    const response = await axios.post(
+  `${import.meta.env.VITE_API_URL}/chat`,
+  {
+    prompt: prompt,
+    systemPrompt: systemPrompt
+  }
+);
 
       setChatgpt(response.data.chatgpt);
       setGemini(response.data.gemini);
@@ -169,7 +222,7 @@ const deleteChat = async (id) => {
 
     } catch (error) {
 
-      alert('Backend connection failed');
+     alert('Unable to connect to backend server.');
 
       console.log(error);
 
@@ -182,6 +235,98 @@ const deleteChat = async (id) => {
   // ===============================
   // UI
   // ===============================
+  
+  if (!isLoggedIn) {
+
+  return (
+
+    <div
+      style={{
+        minHeight: '100vh',
+        backgroundColor: '#0b1120',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+    >
+
+      <div
+        style={{
+          backgroundColor: '#111827',
+          padding: '40px',
+          borderRadius: '20px',
+          width: '350px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.4)'
+        }}
+      >
+
+        <h1
+          style={{
+            textAlign: 'center',
+            marginBottom: '40px',
+            color: 'white',
+            fontSize: '32px',
+          }}
+        >
+          Multi LLM Login
+        </h1>
+
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '12px',
+            marginBottom: '20px',
+            borderRadius: '10px',
+            border: '1px solid #374151',
+            backgroundColor: '#0f172a',
+            color: 'white',
+            boxSizing: 'border-box'
+          }}
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '12px',
+            marginBottom: '20px',
+            borderRadius: '10px',
+            border: '1px solid #374151',
+            backgroundColor: '#0f172a',
+            color: 'white',
+            boxSizing: 'border-box'
+          }}
+        />
+
+        <button
+          onClick={handleLogin}
+          style={{
+            width: '100%',
+            padding: '12px',
+            borderRadius: '10px',
+            border: 'none',
+            backgroundColor: '#2563eb',
+            color: 'white',
+            fontWeight: 'bold',
+            cursor: 'pointer'
+          }}
+        >
+          Login
+        </button>
+
+      </div>
+
+    </div>
+  );
+}
+
   return (
 
     <div style={{ display: 'flex' }}>
@@ -196,9 +341,9 @@ const deleteChat = async (id) => {
       {/* Main Content */}
       <div
         style={{
-          backgroundColor: '#111827',
+         backgroundColor: '#0b1120',
           minHeight: '100vh',
-          padding: '30px',
+          padding: '40px',
           color: 'white',
           fontFamily: 'Arial',
           flex: 1
@@ -208,12 +353,53 @@ const deleteChat = async (id) => {
         {/* Title */}
         <h1
           style={{
-            textAlign: 'center',
-            marginBottom: '30px'
-          }}
+    textAlign: 'center',
+    marginBottom: '40px',
+    fontSize: '40px',
+    fontWeight: 'bold',
+    letterSpacing: '1px',
+    color: '#f8fafc',
+    textShadow: '0 2px 8px rgba(0,0,0,0.4)',
+       }}
         >
           Multi LLM ChatGPT Clone
         </h1>
+
+        <p
+  style={{
+    textAlign: 'center',
+    color: '#94a3b8',
+    marginBottom: '40px',
+    fontSize: '16px'
+  }}
+>
+  Compare AI responses from ChatGPT, Gemini, and Claude in one place.
+</p>
+
+<div
+  style={{
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginBottom: '20px'
+  }}
+>
+
+  <button
+    onClick={handleLogout}
+    style={{
+      padding: '10px 16px',
+      borderRadius: '10px',
+      border: 'none',
+      backgroundColor: '#334155',
+      color: 'white',
+      cursor: 'pointer',
+      fontWeight: 'bold'
+    }}
+  >
+    Logout
+  </button>
+
+</div>
 
         {/* Input */}
         <select
@@ -224,11 +410,16 @@ const deleteChat = async (id) => {
   }
 
   style={{
-    padding: '10px',
+    padding: '12px 16px',
     borderRadius: '10px',
     marginBottom: '20px',
-    fontSize: '16px'
-  }}
+    fontSize: '15px',
+    backgroundColor: '#1f2937',
+    color: 'white',
+    border: '1px solid #374151',
+    outline: 'none',
+    cursor: 'pointer'
+}}
 >
 
   <option>ChatGPT</option>
@@ -252,30 +443,40 @@ const deleteChat = async (id) => {
   }
 }}
           placeholder="Ask anything..."
-          style={{
-            width: '100%',
-            height: '120px',
-            padding: '15px',
-            borderRadius: '10px',
-            fontSize: '16px',
-            border: 'none',
-            outline: 'none'
-          }}
+         style={{
+    width: '100%',
+    height: '140px',
+    padding: '18px',
+    borderRadius: '15px',
+    fontSize: '16px',
+    border: '1px solid #374151',
+    outline: 'none',
+    backgroundColor: '#1f2937',
+    color: 'white',
+    resize: 'none',
+    marginTop: '10px',
+    lineHeight: '1.6',
+    boxSizing: 'border-box',
+}}
         />
 
         {/* Button */}
         <button
           onClick={generateResponses}
           style={{
-            marginTop: '20px',
-            padding: '12px 25px',
-            backgroundColor: '#2563eb',
-            color: 'white',
-            border: 'none',
-            borderRadius: '10px',
-            cursor: 'pointer',
-            fontSize: '16px'
-          }}
+    marginTop: '20px',
+    padding: '14px 28px',
+    backgroundColor: '#2563eb',
+    color: 'white',
+    border: 'none',
+    borderRadius: '12px',
+    cursor: 'pointer',
+    fontSize: '16px',
+    fontWeight: 'bold',
+    transition: '0.3s',
+    opacity: loading ? 0.7 : 1,
+
+}}
         >
           {loading ? 'Loading...' : 'Generate Responses'}
         </button>
@@ -290,24 +491,74 @@ const deleteChat = async (id) => {
   }}
 >
 
+{
+  messages.length === 0 && (
+
+    <div
+      style={{
+        textAlign: 'center',
+        marginTop: '80px',
+        color: '#94a3b8'
+      }}
+    >
+
+      <h2
+        style={{
+          marginBottom: '15px'
+        }}
+      >
+        Start Your AI Conversation
+      </h2>
+
+      <p>
+        Compare ChatGPT, Gemini, and Claude responses side-by-side.
+      </p>
+
+    </div>
+  )
+}
+
   {
     messages.map((msg, index) => (
 
       <div
         key={index}
+        ref={index === messages.length - 1 ? messagesEndRef : null}
         style={{
-          backgroundColor: '#1f2937',
-          padding: '20px',
-          borderRadius: '15px'
-        }}
+   backgroundColor: '#111827',
+    padding: '25px',
+    borderRadius: '20px',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+}}
       >
 
         {/* User Prompt */}
-        <div style={{ marginBottom: '20px' }}>
+        <div
+  style={{
+    marginBottom: '25px',
+    padding: '15px',
+  backgroundColor: '#0f172a',
+    borderRadius: '12px'
+  }}
+>
 
-          <h3>User</h3>
+         <h3
+  style={{
+    marginBottom: '10px',
+    fontSize: '18px'
+  }}
+>
+  User
+</h3>
 
-          <p>{msg.prompt}</p>
+          <p
+  style={{
+    lineHeight: '1.7',
+    fontSize: '16px'
+  }}
+>
+  {msg.prompt}
+</p>
 
         </div>
 
@@ -315,7 +566,8 @@ const deleteChat = async (id) => {
   style={{
     display: 'flex',
     gap: '20px',
-    marginTop: '20px'
+    marginTop: '20px',
+    flexWrap: 'wrap'
   }}
 >
 
@@ -347,7 +599,7 @@ const deleteChat = async (id) => {
   }
 
 </div> 
-<div ref={messagesEndRef}></div>
+
 
       </div>
 
