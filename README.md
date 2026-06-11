@@ -250,6 +250,7 @@ Frontend Display
 ### Comparison View 4
 
 ![Comparison 4](screenshots/comparison-4.png)
+
 ## Chat History
 
 ![Chat History](screenshots/history.png)
@@ -273,6 +274,11 @@ Frontend Display
 
 # 👨‍💻 Author
 
+Kousar Begum
+
+GitHub: https://github.com/kousarbegumwaseem-eng
+
 Created as part of AI/ML learning and Multi-LLM architecture exploration.
 
-This project demonstrates full-stack development, database integration, API integration, prompt engineering concepts, and modern AI application design.
+This project demonstrates full-stack development, PostgreSQL integration, AI API integration, prompt engineering concepts, and modern AI application design.
+
