@@ -233,13 +233,23 @@ Frontend Display
 
 ![Dashboard](screenshots/dashboard.png)
 
-## AI Comparison
+## AI Response Comparison
 
-![AI Comparison](screenshots/comparison-1.png)
-![AI Comparison](screenshots/comparison-2.png)
-![AI Comparison](screenshots/comparison-3.png)
-![AI Comparison](screenshots/comparison-4.png)
+### Comparison View 1
 
+![Comparison 1](screenshots/comparison-1.png)
+
+### Comparison View 2
+
+![Comparison 2](screenshots/comparison-2.png)
+
+### Comparison View 3
+
+![Comparison 3](screenshots/comparison-3.png)
+
+### Comparison View 4
+
+![Comparison 4](screenshots/comparison-4.png)
 ## Chat History
 
 ![Chat History](screenshots/history.png)
